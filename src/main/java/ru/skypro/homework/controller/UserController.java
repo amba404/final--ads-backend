@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Tag(name = "Пользователи")
 public class UserController {
 
     private final UserService userService;
@@ -34,23 +36,26 @@ public class UserController {
 
     @GetMapping("/me")
     public User getCurrentUser() {
-        return userService.getCurrentUser();
+        return userService.getUser();
     }
 
     @PatchMapping("/me")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUser newUser) {
-        if (userService.updateUser(newUser)) {
-            return ResponseEntity.ok().build();
+        UpdateUser updateUser = userService.updateUser(newUser);
+        if (updateUser != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(updateUser);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @PatchMapping("/me/image")
-    @PostMapping(value = "/{studentId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
-        if (userService.updateUserImage(image)){
-            return ResponseEntity.ok().build();
+        byte[] bytes = userService.updateUserImage(image);
+        if (bytes.length > 0) {
+            return ResponseEntity.ok().body(bytes);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

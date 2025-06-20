@@ -15,17 +15,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getCurrentUser() {
+    public User getUser() {
         return new User();
     }
 
     @Override
-    public boolean updateUser(UpdateUser user) {
-        return true;
+    public UpdateUser updateUser(UpdateUser user) {
+        return new UpdateUser();
     }
 
     @Override
-    public boolean updateUserImage(MultipartFile file) {
-        return true;
+    public byte[] updateUserImage(MultipartFile image) {
+        return new byte[0];
     }
 }
