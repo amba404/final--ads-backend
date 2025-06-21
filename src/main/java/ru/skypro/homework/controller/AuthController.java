@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @Tag(name = "Авторизация")
+    @Operation(summary = "Авторизация пользователя", operationId = "login")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -32,6 +34,7 @@ public class AuthController {
     }
 
     @Tag(name = "Регистрация")
+    @Operation(summary = "Регистрация пользователя", operationId = "register")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
