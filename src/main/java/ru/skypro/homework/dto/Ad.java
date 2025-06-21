@@ -1,12 +1,24 @@
 package ru.skypro.homework.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+@Schema(description = "Объявление")
 @Data
 public class Ad {
-    private Integer author;
+
+    @Schema(description = "id автора объявления")
+    private int author;
+
+    @Schema(description = "ссылка на картинку объявления")
     private String image;
-    private Integer pk;
-    private Integer price;
+
+    @Schema(description = "id картинки объявления")
+    private int pk;
+
+    @Schema(description = "цена объявления")
+    private int price;
+
+    @Schema(description = "заголовок объявления")
     private String title;
 }

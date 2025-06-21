@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +9,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.CommentService;
 
+@Tag(name = "Объявления", description = "Методы для работы с объявлениями")
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -20,88 +24,50 @@ import ru.skypro.homework.service.CommentService;
 public class AdsController {
 
     private final AdsService adsService;
-    private final CommentService commentService;
 
-    @Tag(name = "Объявления")
+    @Operation(summary = "Получение всех объявлений", operationId = "getAllAds")
     @GetMapping()
     public Ads getAllAds() {
         return adsService.getAllAds();
     }
 
-    @Tag(name = "Объявления")
+    @Operation(summary = "Добавление объявления", operationId = "addAd")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Ad addAd(@RequestBody CreateOrUpdateAd properties, @RequestBody MultipartFile image) {
         return adsService.addAd(properties, image);
     }
 
-    @Tag(name = "Объявления")
+    @Operation(summary = "Получение информации об объявлении", operationId = "getAds")
     @GetMapping("/{id}")
     public ExtendedAd getAds(@PathVariable int id) {
         return adsService.getAds(id);
     }
 
-    @Tag(name = "Объявления")
+    @Operation(summary = "Удаление объявления", operationId = "removeAd")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeAd(@PathVariable int id) {
-        if (adsService.removeAd(id)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public void removeAd(@PathVariable int id) {
+        adsService.removeAd(id);
     }
 
-    @Tag(name = "Объявления")
+    @Operation(summary = "Обновление информации об объявлении", operationId = "updateAds")
     @PatchMapping("/{id}")
     public Ad updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAd updateAd) {
         return adsService.updateAds(id, updateAd);
     }
 
-    @Tag(name = "Объявления")
+    @Operation(summary = "Получение объявлений авторизованного пользователя", operationId = "getAdsMe")
     @GetMapping("/me")
     public Ads getAdsMe() {
         return adsService.getAdsMe();
     }
 
-    @Tag(name = "Объявления")
+    @Operation(summary = "Обновление картинки объявления", operationId = "updateImage")
     @PatchMapping("/{id}/image")
     public ResponseEntity<?> updateImage(@PathVariable int id, @RequestBody MultipartFile image) {
         byte[] bytes = adsService.updateImage(id, image);
         if (bytes.length > 0) {
             return ResponseEntity.ok()
                     .body(bytes);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
-
-    @Tag(name = "Комментарии")
-    @GetMapping("/{id}/comments")
-    public Comments getComments(@PathVariable int id) {
-        return commentService.getComments(id);
-    }
-
-    @Tag(name = "Комментарии")
-    @PostMapping("/{id}/comments")
-    public Comment addComment(@PathVariable int id, @RequestBody CreateOrUpdateComment comment) {
-        return commentService.addComment(id, comment);
-    }
-
-    @Tag(name = "Комментарии")
-    @DeleteMapping("/{id}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable int id, @PathVariable int commentId) {
-        if (commentService.deleteComment(id, commentId)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
-
-    @Tag(name = "Комментарии")
-    @PatchMapping("/{id}/comments/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable int id, @PathVariable int commentId, @RequestBody CreateOrUpdateComment comment) {
-        Comment result = commentService.updateComment(id, commentId, comment);
-        if (result != null) {
-            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
