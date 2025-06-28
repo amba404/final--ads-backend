@@ -6,10 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.config.UserConfig;
+import ru.skypro.homework.dto.Role;
 
 @Entity
+@Data
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,14 +18,14 @@ import ru.skypro.homework.config.UserConfig;
 @Setter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer id;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = UserConfig.EMAIL_MAX_LENGTH)
     @Email
     private String email;
 
@@ -48,5 +49,9 @@ public class User {
 
     @Column(name = "image")
     private String image;
+
+    @Column(name = "password_encoded", nullable = false)
+    @NotBlank
+    private String passwordEncoded;
 
 }

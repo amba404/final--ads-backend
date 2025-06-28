@@ -6,32 +6,33 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import ru.skypro.homework.config.UserConfig;
 
 @Data
 @Schema(description = "Данные для регистрации пользователя")
 public class Register {
 
     @NotEmpty
-    @Size(min = 4, max = 32)
+    @Size(min = UserConfig.EMAIL_MIN_LENGTH, max = UserConfig.EMAIL_MIN_LENGTH)
     @Schema(description = "логин")
     private String username;
 
     @NotEmpty
-    @Size(min = 8, max = 16)
+    @Size(min = UserConfig.PASSWORD_MIN_LENGTH, max = UserConfig.PASSWORD_MAX_LENGTH)
     @Schema(description = "пароль")
     private String password;
 
     @NotEmpty
-    @Size(min = 2, max = 16)
+    @Size(min = UserConfig.FIRST_NAME_MIN_LENGTH, max = UserConfig.FIRST_NAME_MAX_LENGTH)
     @Schema(description = "имя пользователя")
     private String firstName;
 
     @NotEmpty
-    @Size(min = 2, max = 16)
+    @Size(min = UserConfig.LAST_NAME_MIN_LENGTH, max = UserConfig.LAST_NAME_MAX_LENGTH)
     @Schema(description = "фамилия пользователя")
     private String lastName;
 
-    @Pattern(regexp = "^\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}$")
+    @Pattern(regexp = UserConfig.PHONE_PATTERN)
     @Schema(description = "телефон пользователя")
     private String phone;
 
