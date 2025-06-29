@@ -12,7 +12,7 @@ import ru.skypro.homework.service.CommentService;
 
 @Tag(name = "Комментарии", description = "Методы для работы с комментариями")
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
