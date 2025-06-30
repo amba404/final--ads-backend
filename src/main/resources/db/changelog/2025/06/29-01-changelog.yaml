@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1751009320649-1
+      id: 1751124046614-1
       author: Admin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -17,17 +17,17 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: email
-                  type: VARCHAR(255)
+                  name: username
+                  type: VARCHAR(32)
               - column:
                   constraints:
                     nullable: false
-                  name: first_name
+                  name: firstname
                   type: VARCHAR(10)
               - column:
                   constraints:
                     nullable: false
-                  name: last_name
+                  name: lastname
                   type: VARCHAR(10)
               - column:
                   constraints:
@@ -42,14 +42,19 @@ databaseChangeLog:
               - column:
                   name: image
                   type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
             tableName: users
   - changeSet:
-      id: 1751009320649-2
+      id: 1751124046614-2
       author: Admin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
-            columnNames: email
-            constraintName: uc_users_email
+            columnNames: username
+            constraintName: uc_users_username
             tableName: users
 

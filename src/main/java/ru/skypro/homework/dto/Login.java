@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -12,6 +13,7 @@ public class Login {
 
     @NotEmpty
     @Size(min = UserConfig.EMAIL_MIN_LENGTH, max = UserConfig.EMAIL_MAX_LENGTH)
+    @Email
     @Schema(description = "логин")
     private String username;
 

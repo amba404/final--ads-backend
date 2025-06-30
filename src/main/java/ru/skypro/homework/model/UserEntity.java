@@ -6,8 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.config.UserConfig;
 import ru.skypro.homework.dto.Role;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,23 +24,23 @@ import ru.skypro.homework.dto.Role;
 @Setter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class UserEntity {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer id;
 
-    @Column(name = "email", nullable = false, unique = true, length = UserConfig.EMAIL_MAX_LENGTH)
+    @Column(name = "username", nullable = false, unique = true, length = UserConfig.EMAIL_MAX_LENGTH)
     @Email
-    private String email;
+    private String username;
 
-    @Column(name = "first_name", nullable = false, length = UserConfig.FIRST_NAME_MAX_LENGTH)
+    @Column(name = "firstname", nullable = false, length = UserConfig.FIRST_NAME_MAX_LENGTH)
     @Size(min = UserConfig.FIRST_NAME_MIN_LENGTH, max = UserConfig.FIRST_NAME_MAX_LENGTH)
     @NotBlank
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = UserConfig.LAST_NAME_MAX_LENGTH)
+    @Column(name = "lastname", nullable = false, length = UserConfig.LAST_NAME_MAX_LENGTH)
     @Size(min = UserConfig.LAST_NAME_MIN_LENGTH, max = UserConfig.LAST_NAME_MAX_LENGTH)
     @NotBlank
     private String lastName;
@@ -47,11 +53,15 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "image")
-    private String image;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ImageEntity image;
 
-    @Column(name = "password_encoded", nullable = false)
+    @Column(name = "password", nullable = false)
     @NotBlank
-    private String passwordEncoded;
+    private String password;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
 }

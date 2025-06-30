@@ -12,11 +12,11 @@ public class NewPassword {
 
     @NotEmpty
     @Size(min = UserConfig.PASSWORD_MIN_LENGTH, max = UserConfig.PASSWORD_MAX_LENGTH)
-    @Schema(description = "текущий пароль", minLength = 8, maxLength = 16)
+    @Schema(description = "текущий пароль", minLength = UserConfig.PASSWORD_MIN_LENGTH, maxLength = UserConfig.PASSWORD_MAX_LENGTH)
     private String currentPassword;
 
     @NotEmpty
-    @Schema(description = "новый пароль", minLength = 8, maxLength = 16)
+    @Schema(description = "новый пароль", minLength = UserConfig.PASSWORD_MIN_LENGTH, maxLength = UserConfig.PASSWORD_MAX_LENGTH)
     @Size(min = UserConfig.PASSWORD_MIN_LENGTH, max = UserConfig.PASSWORD_MAX_LENGTH)
     private String newPassword;
 }
