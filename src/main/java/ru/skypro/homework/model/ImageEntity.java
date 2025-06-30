@@ -24,7 +24,6 @@ public class ImageEntity {
     @NotEmpty(message = "Путь не может быть пустым")
     private String filePath;
 
-    @NotEmpty
     private long fileSize;
 
     @NotEmpty(message = "Тип файла не может быть пустым")
@@ -39,6 +38,6 @@ public class ImageEntity {
     }
 
     public String getUrl() {
-        return "/images/" + id.toString();
+        return "/image/" + id.toString();
     }
 }

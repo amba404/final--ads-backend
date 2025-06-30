@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                                 authorization
                                         .requestMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .requestMatchers("/ads/**", "/users/**")
+                                        .requestMatchers("/ads/**", "/users/**", "/image/**")
                                         .authenticated())
                 .cors(withDefaults())
                 .httpBasic(withDefaults());
