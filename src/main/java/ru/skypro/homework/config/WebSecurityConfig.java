@@ -4,18 +4,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class WebSecurityConfig {
+
+    private final static int ENCODE_STRENGTH = 5;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -27,49 +25,38 @@ public class WebSecurityConfig {
             "/register"
     };
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+//        UserDetails user =
+//                User.builder()
+//                        .username("user@gmail.com")
+//                        .password("password")
+//                        .passwordEncoder(passwordEncoder::encode)
+//                        .roles(Role.USER.name())
+//                        .build();
+//        return new InMemoryUserDetailsManager(user);
+//    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorization ->
                                 authorization
                                         .requestMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .requestMatchers("/ads/**", "/users/**")
-                                        .authenticated());
-        http.httpBasic(withDefaults());
+                                        .requestMatchers("/ads/**", "/users/**", "/image/**")
+                                        .authenticated())
+                .cors(withDefaults())
+                .httpBasic(withDefaults());
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(ENCODE_STRENGTH);
     }
-
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.addAllowedOrigin("http://localhost:3000");
-//        corsConfiguration.addAllowedHeader("*");
-//        corsConfiguration.addAllowedMethod("*");
-//        corsConfiguration.setAllowCredentials(true);
-//        corsConfiguration.setMaxAge(3600L);
-//
-//        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-//        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-//        return new CorsFilter(urlBasedCorsConfigurationSource);
-//    }
 
 }

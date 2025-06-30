@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -25,7 +26,7 @@ public class AuthController {
     @Tag(name = "Авторизация")
     @Operation(summary = "Авторизация пользователя", operationId = "login")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login) {
+    public ResponseEntity<?> login(@RequestBody @Validated Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -36,7 +37,7 @@ public class AuthController {
     @Tag(name = "Регистрация")
     @Operation(summary = "Регистрация пользователя", operationId = "register")
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Register register) {
+    public ResponseEntity<?> register(@RequestBody @Validated Register register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
