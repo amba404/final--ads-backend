@@ -1,10 +1,7 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import ru.skypro.homework.config.UserConfig;
 
@@ -13,8 +10,9 @@ import ru.skypro.homework.config.UserConfig;
 public class Register {
 
     @NotEmpty
-    @Size(min = UserConfig.EMAIL_MIN_LENGTH, max = UserConfig.EMAIL_MIN_LENGTH)
+    @Size(min = UserConfig.EMAIL_MIN_LENGTH, max = UserConfig.EMAIL_MAX_LENGTH)
     @Schema(description = "логин")
+    @Email
     private String username;
 
     @NotEmpty
