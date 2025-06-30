@@ -30,38 +30,38 @@ public class AdsController {
 
     @Operation(summary = "Получение всех объявлений", operationId = "getAllAds")
     @GetMapping()
-    public Ads getAllAds(Principal principal) {
+    public Ads getAllAds() {
         return adsService.getAllAds();
     }
 
     @Operation(summary = "Добавление объявления", operationId = "addAd")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Ad addAd(Principal principal, @RequestBody CreateOrUpdateAd properties, @RequestBody MultipartFile image) throws IOException {
-        return adsService.addAd(properties, image);
+        return adsService.addAd(principal.getName(), properties, image);
     }
 
     @Operation(summary = "Получение информации об объявлении", operationId = "getAds")
     @GetMapping("/{id}")
-    public ExtendedAd getAds(Principal principal, @PathVariable int id) {
+    public ExtendedAd getAds(@PathVariable int id) {
         return adsService.getAds(id);
     }
 
     @Operation(summary = "Удаление объявления", operationId = "removeAd")
     @DeleteMapping("/{id}")
     public void removeAd(Principal principal, @PathVariable int id) {
-        adsService.removeAd(id);
+        adsService.removeAd(principal.getName(), id);
     }
 
     @Operation(summary = "Обновление информации об объявлении", operationId = "updateAds")
     @PatchMapping("/{id}")
     public Ad updateAds(Principal principal, @PathVariable int id, @RequestBody CreateOrUpdateAd updateAd) {
-        return adsService.updateAds(id, updateAd);
+        return adsService.updateAds(principal.getName(), id, updateAd);
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя", operationId = "getAdsMe")
     @GetMapping("/me")
     public Ads getAdsMe(Principal principal) {
-        return adsService.getAdsMe();
+        return adsService.getAdsMe(principal.getName());
     }
 
     @Operation(summary = "Обновление картинки объявления", operationId = "updateImage")
