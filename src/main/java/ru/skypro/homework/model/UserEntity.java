@@ -53,12 +53,15 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private ImageEntity image;
-
     @Column(name = "password", nullable = false)
     @NotBlank
     private String password;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ImageEntity image;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AdEntity> ads;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
