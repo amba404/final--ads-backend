@@ -15,6 +15,9 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdsService;
 
+import java.io.IOException;
+import java.security.Principal;
+
 @Tag(name = "Объявления", description = "Методы для работы с объявлениями")
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
@@ -27,44 +30,44 @@ public class AdsController {
 
     @Operation(summary = "Получение всех объявлений", operationId = "getAllAds")
     @GetMapping()
-    public Ads getAllAds() {
+    public Ads getAllAds(Principal principal) {
         return adsService.getAllAds();
     }
 
     @Operation(summary = "Добавление объявления", operationId = "addAd")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ad addAd(@RequestBody CreateOrUpdateAd properties, @RequestBody MultipartFile image) {
+    public Ad addAd(Principal principal, @RequestBody CreateOrUpdateAd properties, @RequestBody MultipartFile image) throws IOException {
         return adsService.addAd(properties, image);
     }
 
     @Operation(summary = "Получение информации об объявлении", operationId = "getAds")
     @GetMapping("/{id}")
-    public ExtendedAd getAds(@PathVariable int id) {
+    public ExtendedAd getAds(Principal principal, @PathVariable int id) {
         return adsService.getAds(id);
     }
 
     @Operation(summary = "Удаление объявления", operationId = "removeAd")
     @DeleteMapping("/{id}")
-    public void removeAd(@PathVariable int id) {
+    public void removeAd(Principal principal, @PathVariable int id) {
         adsService.removeAd(id);
     }
 
     @Operation(summary = "Обновление информации об объявлении", operationId = "updateAds")
     @PatchMapping("/{id}")
-    public Ad updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAd updateAd) {
+    public Ad updateAds(Principal principal, @PathVariable int id, @RequestBody CreateOrUpdateAd updateAd) {
         return adsService.updateAds(id, updateAd);
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя", operationId = "getAdsMe")
     @GetMapping("/me")
-    public Ads getAdsMe() {
+    public Ads getAdsMe(Principal principal) {
         return adsService.getAdsMe();
     }
 
     @Operation(summary = "Обновление картинки объявления", operationId = "updateImage")
     @PatchMapping("/{id}/image")
-    public ResponseEntity<?> updateImage(@PathVariable int id, @RequestBody MultipartFile image) {
-        byte[] bytes = adsService.updateImage(id, image);
+    public ResponseEntity<?> updateImage(Principal principal, @PathVariable int id, @RequestBody MultipartFile image) throws IOException {
+        byte[] bytes = adsService.updateImage(principal.getName(), id, image);
         if (bytes.length > 0) {
             return ResponseEntity.ok()
                     .body(bytes);

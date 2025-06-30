@@ -105,7 +105,8 @@ public class UserServiceImpl implements UserService {
                 .User(user.getUsername(), user.getPassword(), authorities);
     }
 
-    private UserEntity getUserOrThrow(String username) throws UsernameNotFoundException {
+    @Override
+    public UserEntity getUserOrThrow(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }

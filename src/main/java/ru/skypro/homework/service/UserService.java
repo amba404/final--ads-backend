@@ -1,11 +1,13 @@
 package ru.skypro.homework.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.model.UserEntity;
 
 import java.io.IOException;
 
@@ -21,4 +23,6 @@ public interface UserService extends UserDetailsService {
     boolean userExists(String userName);
 
     void createUser(Register user);
+
+    UserEntity getUserOrThrow(String username) throws UsernameNotFoundException;
 }
