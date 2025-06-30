@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
@@ -36,7 +37,7 @@ public class AdsController {
 
     @Operation(summary = "Добавление объявления", operationId = "addAd")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ad addAd(Principal principal, @RequestBody CreateOrUpdateAd properties, @RequestBody MultipartFile image) throws IOException {
+    public Ad addAd(Principal principal, @RequestBody @Validated CreateOrUpdateAd properties, @RequestBody MultipartFile image) throws IOException {
         return adsService.addAd(principal.getName(), properties, image);
     }
 
@@ -54,7 +55,7 @@ public class AdsController {
 
     @Operation(summary = "Обновление информации об объявлении", operationId = "updateAds")
     @PatchMapping("/{id}")
-    public Ad updateAds(Principal principal, @PathVariable int id, @RequestBody CreateOrUpdateAd updateAd) {
+    public Ad updateAds(Principal principal, @PathVariable int id, @RequestBody @Validated CreateOrUpdateAd updateAd) {
         return adsService.updateAds(principal.getName(), id, updateAd);
     }
 
