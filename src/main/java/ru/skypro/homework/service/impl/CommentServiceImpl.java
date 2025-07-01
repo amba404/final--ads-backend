@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.exception.NoRightsException;
 import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdEntity;
@@ -26,14 +25,14 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public Comments getComments(int id) {
-        return commentMapper.toComments(commentRepository.findAllByAdId(id));
+    public Comments getComments(int adId) {
+        return commentMapper.toComments(commentRepository.findAllByAdId(adId));
     }
 
     @Override
-    public Comment addComment(String username, int id, CreateOrUpdateComment comment) {
+    public Comment addComment(String username, int adId, CreateOrUpdateComment comment) {
         UserEntity user = userService.getUserOrThrow(username);
-        AdEntity ad = adsService.getAdOrThrow(id);
+        AdEntity ad = adsService.getAdOrThrow(adId);
 
         CommentEntity commentEntity = commentMapper.toCommentEntity(comment);
         commentEntity.setAuthor(user);
@@ -45,30 +44,26 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(String username, int adId, int commentId) {
-        UserEntity currentUser = userService.getUserOrThrow(username);
-        AdEntity ad = adsService.getAdOrThrow(adId);
+        CommentEntity comment = getCommentOrThrow(commentId);
 
-        if (!commentRepository.existsById(commentId)) {
-            throw new NotFoundException("Comment not found");
-        }
+        userService.checkOwnerOrThrow(username, comment.getAuthor());
 
-        if (currentUser.equals(ad.getAuthor()) || currentUser.getRole().name().equals("ADMIN")) {
-            commentRepository.deleteById(commentId);
-        }
+        commentRepository.delete(comment);
     }
 
     @Override
     public Comment updateComment(String username, int adId, int commentId, CreateOrUpdateComment comment) {
-        UserEntity currentUser = userService.getUserOrThrow(username);
-        AdEntity ad = adsService.getAdOrThrow(adId);
+        CommentEntity commentEntity = getCommentOrThrow(commentId);
 
-        if (currentUser.equals(ad.getAuthor()) || currentUser.getRole().name().equals("ADMIN")) {
-            CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("Comment not found"));
-            commentEntity.setText(comment.getText());
+        userService.checkOwnerOrThrow(username, commentEntity.getAuthor());
 
-            return commentMapper.toComment(commentRepository.save(commentEntity));
-        } else {
-            throw new NoRightsException();
-        }
+        commentEntity.setText(comment.getText());
+
+        return commentMapper.toComment(commentRepository.save(commentEntity));
+    }
+
+    private CommentEntity getCommentOrThrow(int commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("Comment not found"));
     }
 }

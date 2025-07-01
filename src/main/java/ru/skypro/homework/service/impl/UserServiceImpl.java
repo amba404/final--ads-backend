@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.exception.NoRightsException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
@@ -109,5 +110,14 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserOrThrow(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    @Override
+    public void checkOwnerOrThrow(String username, UserEntity author) {
+        UserEntity user = getUserOrThrow(username);
+
+        if (!user.equals(author) && user.getRole().name().equals("ADMIN")) {
+            throw new NoRightsException();
+        }
     }
 }

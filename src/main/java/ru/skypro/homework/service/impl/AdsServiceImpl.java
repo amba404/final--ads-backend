@@ -7,7 +7,6 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.exception.NoRightsException;
 import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.model.AdEntity;
@@ -51,36 +50,29 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ExtendedAd getAds(int id) {
-        return adMapper.toExtendedAdDto(adsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Ad not found")));
+        return adMapper.toExtendedAdDto(getAdOrThrow(id));
     }
 
     @Override
     public Ad updateAds(String username, int id, CreateOrUpdateAd ad) {
-        UserEntity currentUser = userService.getUserOrThrow(username);
-        AdEntity adEntity = adsRepository.findById(id).orElseThrow(() -> new NotFoundException("Ad not found"));
+        AdEntity adEntity = getAdOrThrow(id);
 
-        if (currentUser.equals(adEntity.getAuthor()) || currentUser.getRole().name().equals("ADMIN")) {
-            adEntity.setTitle(ad.getTitle());
-            adEntity.setDescription(ad.getDescription());
-            adEntity.setPrice(ad.getPrice());
+        userService.checkOwnerOrThrow(username, adEntity.getAuthor());
 
-            return adMapper.toAdDto(adsRepository.save(adEntity));
-        } else {
-            throw new NoRightsException("You can't update this ad");
-        }
+        adEntity.setTitle(ad.getTitle());
+        adEntity.setDescription(ad.getDescription());
+        adEntity.setPrice(ad.getPrice());
+
+        return adMapper.toAdDto(adsRepository.save(adEntity));
     }
 
     @Override
     public void removeAd(String username, int id) {
-        UserEntity currentUser = userService.getUserOrThrow(username);
-        AdEntity adEntity = adsRepository.findById(id).orElseThrow(() -> new NotFoundException("Ad not found"));
+        AdEntity adEntity = getAdOrThrow(id);
 
-        if (currentUser.equals(adEntity.getAuthor()) || currentUser.getRole().name().equals("ADMIN")) {
-            adsRepository.delete(adEntity);
-        } else {
-            throw new NoRightsException("You can't delete this ad");
-        }
+        userService.checkOwnerOrThrow(username, adEntity.getAuthor());
+
+        adsRepository.delete(adEntity);
     }
 
     @Override
@@ -94,26 +86,24 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public byte[] updateImage(String username, int id, MultipartFile image) throws IOException {
-        UserEntity currentUser = userService.getUserOrThrow(username);
-        AdEntity adEntity = adsRepository.findById(id).orElseThrow(() -> new NotFoundException("Ad not found"));
+        AdEntity adEntity = getAdOrThrow(id);
 
-        if (currentUser.equals(adEntity.getAuthor()) || currentUser.getRole().name().equals("ADMIN")) {
-            UUID imageId;
-            if (adEntity.getImage() == null) {
-                imageId = UUID.randomUUID();
-            } else {
-                imageId = adEntity.getImage().getId();
-            }
+        userService.checkOwnerOrThrow(username, adEntity.getAuthor());
 
-            byte[] bytes = imageService.saveImage(imageId, image);
-
-            adEntity.setImage(imageService.findById(imageId));
-            adsRepository.save(adEntity);
-
-            return bytes;
+        UUID imageId;
+        if (adEntity.getImage() == null) {
+            imageId = UUID.randomUUID();
         } else {
-            throw new NoRightsException("You can't update this ad's image");
+            imageId = adEntity.getImage().getId();
         }
+
+        byte[] bytes = imageService.saveImage(imageId, image);
+
+        adEntity.setImage(imageService.findById(imageId));
+        adsRepository.save(adEntity);
+
+        return bytes;
+
     }
 
     @Override
