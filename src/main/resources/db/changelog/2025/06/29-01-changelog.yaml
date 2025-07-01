@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1751124046614-1
+      author: Admin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_users
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: firstname
+                  type: VARCHAR(10)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lastname
+                  type: VARCHAR(10)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: phone
+                  type: VARCHAR(18)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role
+                  type: VARCHAR(10)
+              - column:
+                  name: image
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+            tableName: users
+  - changeSet:
+      id: 1751124046614-2
+      author: Admin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: uc_users_username
+            tableName: users
+

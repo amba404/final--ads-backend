@@ -1,16 +1,28 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.model.UserEntity;
 
-public interface UserService {
-    boolean setPassword(NewPassword password);
+import java.io.IOException;
 
-    User getUser();
+public interface UserService extends UserDetailsService {
+    void setPassword(String userName, NewPassword password);
 
-    UpdateUser updateUser(UpdateUser user);
+    User getUser(String userName);
 
-    byte[] updateUserImage(MultipartFile image);
+    UpdateUser updateUser(String userName, UpdateUser user);
+
+    byte[] updateUserImage(String userName, MultipartFile mFile) throws IOException;
+
+    boolean userExists(String userName);
+
+    void createUser(Register user);
+
+    UserEntity getUserOrThrow(String username) throws UsernameNotFoundException;
 }

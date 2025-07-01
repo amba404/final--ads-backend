@@ -8,10 +8,10 @@ public interface CommentService {
 
     Comments getComments(int id);
 
-    Comment addComment(int id, CreateOrUpdateComment comment);
+    Comment addComment(String username, int id, CreateOrUpdateComment comment);
 
-    boolean deleteComment(int adId, int commentId);
+    void deleteComment(String username, int adId, int commentId);
 
-    Comment updateComment(int adId, int commentId, CreateOrUpdateComment comment);
+    Comment updateComment(String username, int adId, int commentId, CreateOrUpdateComment comment);
 
 }
