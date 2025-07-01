@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.model.ImageEntity;
+import ru.skypro.homework.model.Imaged;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
 
@@ -25,7 +26,16 @@ public class ImageServiceImpl implements ImageService {
     private String imageDirectory;
 
     @Override
-    public byte[] saveImage(UUID uuid, @NotNull MultipartFile mFile) throws IOException {
+    public byte[] saveImage(Imaged object, @NotNull MultipartFile mFile) throws IOException {
+
+        UUID uuid;
+
+        if (object.getImage() == null) {
+            uuid = UUID.randomUUID();
+        } else {
+            uuid = object.getImage().getId();
+        }
+
         String imageName = uuid.toString();
         Path filePath = Path.of(imageDirectory, imageName + "." + getExtension(mFile.getOriginalFilename()));
 
@@ -44,7 +54,10 @@ public class ImageServiceImpl implements ImageService {
         image.setMediaType(mFile.getContentType());
         image.setFileSize(mFile.getSize());
         image.setFilePath(filePath.toString());
+
         imageRepository.save(image);
+
+        object.setImage(image);
 
         return mFile.getBytes();
     }

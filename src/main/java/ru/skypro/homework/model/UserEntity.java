@@ -24,7 +24,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class UserEntity implements UserDetails {
+public class UserEntity implements UserDetails, Imaged {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

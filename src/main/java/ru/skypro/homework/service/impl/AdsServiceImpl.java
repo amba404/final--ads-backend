@@ -18,7 +18,6 @@ import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,13 +36,12 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Ad addAd(String username, CreateOrUpdateAd ad, MultipartFile image) throws IOException {
         UserEntity userEntity = userService.getUserOrThrow(username);
-        UUID imageId = UUID.randomUUID();
-
-        imageService.saveImage(imageId, image);
 
         AdEntity adEntity = adMapper.toAdEntity(ad);
+
         adEntity.setAuthor(userEntity);
-        adEntity.setImage(imageService.findById(imageId));
+
+        imageService.saveImage(adEntity, image);
 
         return adMapper.toAdDto(adsRepository.save(adEntity));
     }
@@ -90,16 +88,8 @@ public class AdsServiceImpl implements AdsService {
 
         userService.checkOwnerOrThrow(username, adEntity.getAuthor());
 
-        UUID imageId;
-        if (adEntity.getImage() == null) {
-            imageId = UUID.randomUUID();
-        } else {
-            imageId = adEntity.getImage().getId();
-        }
+        byte[] bytes = imageService.saveImage(adEntity, image);
 
-        byte[] bytes = imageService.saveImage(imageId, image);
-
-        adEntity.setImage(imageService.findById(imageId));
         adsRepository.save(adEntity);
 
         return bytes;
