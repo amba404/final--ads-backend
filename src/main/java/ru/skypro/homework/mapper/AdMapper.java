@@ -37,7 +37,7 @@ public interface AdMapper {
     default Ads toAdsDto(List<AdEntity> ads) {
         Ads adsDto = new Ads();
 
-        if(ads == null || ads.isEmpty()) {
+        if (ads == null || ads.isEmpty()) {
             adsDto.setResults(List.of());
             adsDto.setCount(0);
         } else {
