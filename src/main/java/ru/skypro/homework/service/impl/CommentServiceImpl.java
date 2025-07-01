@@ -34,10 +34,12 @@ public class CommentServiceImpl implements CommentService {
         UserEntity user = userService.getUserOrThrow(username);
         AdEntity ad = adsService.getAdOrThrow(adId);
 
-        CommentEntity commentEntity = commentMapper.toCommentEntity(comment);
+        CommentEntity commentEntity = new CommentEntity();
+
         commentEntity.setAuthor(user);
-        commentEntity.setAd(ad);
+        commentEntity.setText(comment.getText());
         commentEntity.setCreatedAt(System.currentTimeMillis());
+        commentEntity.setAd(ad);
 
         return commentMapper.toComment(commentRepository.save(commentEntity));
     }

@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CommentMapper {
 
-    CommentEntity toCommentEntity(CreateOrUpdateComment comment);
-
     default Comment toComment(CommentEntity comment) {
         Comment result = new Comment();
 

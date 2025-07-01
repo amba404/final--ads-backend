@@ -15,6 +15,7 @@ public interface UserMapper {
     @Mapping(target = "image", ignore = true)
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "ads", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     UserEntity toUserEntity(Register register);
 
     @Mapping(target = "email", source = "username")
