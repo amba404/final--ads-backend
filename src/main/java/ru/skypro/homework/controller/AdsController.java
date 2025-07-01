@@ -37,7 +37,7 @@ public class AdsController {
 
     @Operation(summary = "Добавление объявления", operationId = "addAd")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ad addAd(Principal principal, @RequestBody @Validated CreateOrUpdateAd properties, @RequestBody MultipartFile image) throws IOException {
+    public Ad addAd(Principal principal, @RequestPart("properties") @Validated CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) throws IOException {
         return adsService.addAd(principal.getName(), properties, image);
     }
 
