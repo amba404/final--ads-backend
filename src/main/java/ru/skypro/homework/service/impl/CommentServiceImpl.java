@@ -64,7 +64,8 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toComment(commentRepository.save(commentEntity));
     }
 
-    private CommentEntity getCommentOrThrow(int commentId) {
+    @Override
+    public CommentEntity getCommentOrThrow(int commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment not found"));
     }
