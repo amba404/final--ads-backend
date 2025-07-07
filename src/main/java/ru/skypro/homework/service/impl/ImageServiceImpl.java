@@ -56,6 +56,7 @@ public class ImageServiceImpl implements ImageService {
         image.setFilePath(filePath.toString());
 
         imageRepository.save(image);
+        imageRepository.flush();
 
         object.setImage(image);
 

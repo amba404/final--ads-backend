@@ -26,6 +26,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comments getComments(int adId) {
+        if (!commentRepository.existsByAdId(adId)) {
+            throw new NotFoundException("Ad not found");
+        }
         return commentMapper.toComments(commentRepository.findAllByAdId(adId));
     }
 
@@ -46,7 +49,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(String username, int adId, int commentId) {
-        CommentEntity comment = getCommentOrThrow(commentId);
+        if (!commentRepository.existsByAdId(adId)) {
+            throw new NotFoundException("Ad not found");
+        }
+
+        CommentEntity comment = commentRepository.findById(commentId).orElse(null);
+
+        if (comment == null) {
+            return;
+        }
 
         userService.checkOwnerOrThrow(username, comment.getAuthor());
 
@@ -55,6 +66,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment updateComment(String username, int adId, int commentId, CreateOrUpdateComment comment) {
+        if (!commentRepository.existsByAdId(adId)) {
+            throw new NotFoundException("Ad not found");
+        }
+
         CommentEntity commentEntity = getCommentOrThrow(commentId);
 
         userService.checkOwnerOrThrow(username, commentEntity.getAuthor());
