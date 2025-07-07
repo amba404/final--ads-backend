@@ -38,6 +38,10 @@ public class ImageEntity {
     }
 
     public String getUrl() {
+        if (id == null) {
+            return null;
+        }
+
         return "/image/" + id.toString();
     }
 }

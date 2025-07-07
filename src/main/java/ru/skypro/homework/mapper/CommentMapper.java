@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.model.ImageEntity;
 import ru.skypro.homework.model.UserEntity;
@@ -14,8 +13,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CommentMapper {
-
-    CommentEntity toCommentEntity(CreateOrUpdateComment comment);
 
     default Comment toComment(CommentEntity comment) {
         Comment result = new Comment();

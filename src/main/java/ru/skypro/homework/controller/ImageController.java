@@ -1,5 +1,10 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -14,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
+@Tag(name = "Изображения", description = "Контроллер для работы с изображениями")
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/image")
@@ -22,6 +28,11 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    @Operation(summary = "Получить изображение по id", operationId = "getImageById")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "image/*")}),
+            @ApiResponse(responseCode = "404", description = "Not found")
+    })
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public void getImageById(@PathVariable UUID id, HttpServletResponse response) throws IOException {
         ImageEntity image = imageService.findById(id);

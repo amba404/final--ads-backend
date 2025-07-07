@@ -23,7 +23,8 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/login",
             "/register",
-            "/image/**"
+            "/image/**",
+            "/ads"
     };
 
 //    @Bean
@@ -48,7 +49,7 @@ public class WebSecurityConfig {
                                 authorization
                                         .requestMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .requestMatchers("/ads","/ads/**", "/users/**")
+                                        .requestMatchers("/ads/**", "/users/**")
                                         .authenticated())
                 .cors(withDefaults())
                 .httpBasic(withDefaults());

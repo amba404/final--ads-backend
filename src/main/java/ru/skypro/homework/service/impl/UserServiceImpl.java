@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.exception.NoRightsException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
@@ -19,7 +20,6 @@ import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(encoder.encode(password.getNewPassword()));
             userRepository.save(user);
         } else {
-            throw new RuntimeException("Current password is incorrect");
+            throw new NoRightsException("Current password is incorrect");
         }
     }
 
@@ -57,27 +57,15 @@ public class UserServiceImpl implements UserService {
         userEntity.setLastName(user.getLastName());
         userEntity.setPhone(user.getPhone());
 
-        userRepository.save(userEntity);
-
-        userEntity = getUserOrThrow(userName);
-
-        return userMapper.toUpdateUserDto(userEntity);
+        return userMapper.toUpdateUserDto(userRepository.save(userEntity));
     }
 
     @Override
     public byte[] updateUserImage(String userName, MultipartFile mFile) throws IOException {
         UserEntity userEntity = getUserOrThrow(userName);
 
-        UUID imageId;
-        if (userEntity.getImage() == null) {
-            imageId = UUID.randomUUID();
-        } else {
-            imageId = userEntity.getImage().getId();
-        }
+        byte[] bytes = imageService.saveImage(userEntity, mFile);
 
-        byte[] bytes = imageService.saveImage(imageId, mFile);
-
-        userEntity.setImage(imageService.findById(imageId));
         userRepository.save(userEntity);
 
         return bytes;
@@ -91,7 +79,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(Register register) {
         UserEntity userEntity = userMapper.toUserEntity(register);
+
         userEntity.setPassword(encoder.encode(register.getPassword()));
+
         userRepository.save(userEntity);
     }
 
@@ -109,5 +99,14 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserOrThrow(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    @Override
+    public void checkOwnerOrThrow(String username, UserEntity author) {
+        UserEntity user = getUserOrThrow(username);
+
+        if (!(user.equals(author) || user.getRole().name().equals("ADMIN"))) {
+            throw new NoRightsException();
+        }
     }
 }

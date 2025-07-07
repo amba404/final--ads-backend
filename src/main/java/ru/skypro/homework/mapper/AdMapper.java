@@ -28,12 +28,16 @@ public interface AdMapper {
     @Mapping(target = "image", expression = "java(ad.getImage() != null ? ad.getImage().getUrl() : null)")
     ExtendedAd toExtendedAdDto(AdEntity ad);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "image", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     AdEntity toAdEntity(CreateOrUpdateAd ad);
 
     default Ads toAdsDto(List<AdEntity> ads) {
         Ads adsDto = new Ads();
 
-        if(ads == null || ads.isEmpty()) {
+        if (ads == null || ads.isEmpty()) {
             adsDto.setResults(List.of());
             adsDto.setCount(0);
         } else {

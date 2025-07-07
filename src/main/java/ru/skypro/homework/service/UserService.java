@@ -25,4 +25,6 @@ public interface UserService extends UserDetailsService {
     void createUser(Register user);
 
     UserEntity getUserOrThrow(String username) throws UsernameNotFoundException;
+
+    void checkOwnerOrThrow(String username, UserEntity author);
 }

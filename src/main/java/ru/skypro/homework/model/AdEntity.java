@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class AdEntity {
+public class AdEntity implements Imaged {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
