@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
     public void checkOwnerOrThrow(String username, UserEntity author) {
         UserEntity user = getUserOrThrow(username);
 
-        if (!user.equals(author) && user.getRole().name().equals("ADMIN")) {
+        if (!(user.equals(author) || user.getRole().name().equals("ADMIN"))) {
             throw new NoRightsException();
         }
     }
