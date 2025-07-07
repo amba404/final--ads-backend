@@ -13,7 +13,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CommentMapperImplTest {
+class CommentMapperTest {
 
     private CommentMapper commentMapper;
 
