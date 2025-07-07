@@ -81,6 +81,7 @@ class CommentServiceImplTest {
         comments.setCount(1);
 
         when(commentRepository.findAllByAdId(100)).thenReturn(List.of(commentEntity));
+        when(commentRepository.existsByAdId(100)).thenReturn(true);
         when(commentMapper.toComments(List.of(commentEntity))).thenReturn(comments);
 
         Comments result = commentService.getComments(100);
@@ -109,6 +110,7 @@ class CommentServiceImplTest {
     @Test
     void deleteComment_success() throws NotFoundException {
         when(commentRepository.findById(1)).thenReturn(Optional.of(commentEntity));
+        when(commentRepository.existsByAdId(100)).thenReturn(true);
 
         commentService.deleteComment("testUser", 100, 1);
 
@@ -119,6 +121,7 @@ class CommentServiceImplTest {
     @Test
     void updateComment_success() throws NotFoundException {
         when(commentRepository.findById(1)).thenReturn(Optional.of(commentEntity));
+        when(commentRepository.existsByAdId(100)).thenReturn(true);
         when(commentRepository.save(any(CommentEntity.class))).thenReturn(commentEntity);
         when(commentMapper.toComment(commentEntity)).thenReturn(comment);
 

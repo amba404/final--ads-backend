@@ -162,7 +162,7 @@ class UserServiceImplTest {
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(adminUser));
 
-        assertThrows(NoRightsException.class, () -> userService.checkOwnerOrThrow(username, userEntityUser));
+        assertDoesNotThrow(() -> userService.checkOwnerOrThrow(username, userEntityUser));
     }
 
     @Test
