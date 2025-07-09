@@ -36,9 +36,9 @@ public class ImageServiceImpl implements ImageService {
             uuid = object.getImage().getId();
         }
 
-        String imageName = uuid.toString()+ "." + getExtension(mFile.getOriginalFilename());
+        String imageName = uuid.toString() + "." + getExtension(mFile.getOriginalFilename());
 
-        Path filePath = Path.of(imageDirectory, imageName );
+        Path filePath = Path.of(imageDirectory, imageName);
 
         Files.createDirectories(filePath.getParent());
 

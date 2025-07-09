@@ -13,6 +13,7 @@ import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.UserService;
@@ -27,6 +28,9 @@ class CommentServiceImplTest {
 
     @Mock
     private CommentRepository commentRepository;
+
+    @Mock
+    private AdsRepository adsRepository;
 
     @Mock
     private UserService userService;
@@ -81,7 +85,7 @@ class CommentServiceImplTest {
         comments.setCount(1);
 
         when(commentRepository.findAllByAdId(100)).thenReturn(List.of(commentEntity));
-        when(commentRepository.existsByAdId(100)).thenReturn(true);
+        when(adsRepository.existsById(100)).thenReturn(true);
         when(commentMapper.toComments(List.of(commentEntity))).thenReturn(comments);
 
         Comments result = commentService.getComments(100);

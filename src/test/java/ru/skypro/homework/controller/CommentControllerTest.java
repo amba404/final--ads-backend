@@ -29,20 +29,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CommentControllerTest {
 
     public static final int INVALID_AD_ID = -1;
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private AdsRepository adRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
-
     private static final String USER_NAME = "test@example.com";
     private static final String ADMIN_NAME = "admin@example.com";
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private AdsRepository adRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CommentRepository commentRepository;
     private AdEntity testAd;
     private UserEntity user, admin;
     private CommentEntity testCommentUser, testCommentAdmin;
@@ -199,7 +195,6 @@ public class CommentControllerTest {
     }
 
     @Test
-    //@WithMockUser(username = USER_NAME, roles = "USER")
     void updateComment_shouldReturn401() throws Exception {
         CreateOrUpdateComment updatedComment = new CreateOrUpdateComment();
         updatedComment.setText("Updated text");

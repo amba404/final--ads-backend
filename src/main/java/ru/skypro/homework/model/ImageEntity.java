@@ -42,6 +42,6 @@ public class ImageEntity {
             return null;
         }
 
-        return "/image/" + id.toString();
+        return "/image/" + id;
     }
 }

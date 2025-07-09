@@ -19,8 +19,7 @@ class UserMapperTest {
 
     @BeforeEach
     void setUp() {
-        // Получаем реализацию через MapStruct (реализация генерируется автоматически)
-        userMapper = new UserMapperImpl(); // Убедитесь, что есть UserMapperImpl.java
+        userMapper = new UserMapperImpl();
     }
 
     @Test
