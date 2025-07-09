@@ -22,6 +22,11 @@ import ru.skypro.homework.service.UserService;
 import java.io.IOException;
 import java.security.Principal;
 
+/**
+ * Контроллер для работы с пользователями
+ * <p>
+ * Обрабатывает запросы на изменение пароля, получение информации о пользователе и обновление аватара
+ */
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -32,6 +37,12 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * Обновление пароля
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param newPassword новый пароль, объект {@link NewPassword}
+     * @code 200 OK, 401 Unauthorized
+     */
     @Operation(summary = "Обновление пароля", operationId = "setPassword")
     @PostMapping("/set_password")
     @ApiResponses(value = {
@@ -42,6 +53,11 @@ public class UserController {
         userService.setPassword(principal.getName(), newPassword);
     }
 
+    /**
+     * Получение информации об авторизованном пользователе
+     * @param principal авторизованный пользователь {@link Principal}
+     * @return объект {@link User}
+     */
     @Operation(summary = "Получение информации об авторизованном пользователе", operationId = "getCurrentUser")
     @GetMapping("/me")
     @ApiResponses(value = {
@@ -53,6 +69,12 @@ public class UserController {
         return userService.getUser(principal.getName());
     }
 
+    /**
+     * Обновление информации об авторизованном пользователе
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param newUser новая информация о пользователе {@link UpdateUser}
+     * @return обновленный объект {@link UpdateUser}
+     */
     @Operation(summary = "Обновление информации об авторизованном пользователе", operationId = "updateUser")
     @PatchMapping("/me")
     @ApiResponses(value = {
@@ -64,6 +86,11 @@ public class UserController {
         return userService.updateUser(principal.getName(), newUser);
     }
 
+    /**
+     * Обновление аватара авторизованного пользователя
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param image файл изображения {@link MultipartFile}
+     */
     @Operation(summary = "Обновление аватара авторизованного пользователя", operationId = "updateUserImage")
     @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {

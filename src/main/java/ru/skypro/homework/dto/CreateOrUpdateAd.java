@@ -8,6 +8,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.skypro.homework.config.AdConfig;
 
+/**
+ * DTO для создания или изменения объявления
+ */
 @Data
 @Schema(description = "Данные для создания или изменения объявления")
 public class CreateOrUpdateAd {

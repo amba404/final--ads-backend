@@ -19,6 +19,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
+/**
+ * Контроллер для работы с изображениями
+ * <p>
+ * Обрабатывает запросы на получение изображения по id
+ */
 @Tag(name = "Изображения", description = "Контроллер для работы с изображениями")
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -28,6 +33,10 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    /**
+     * Получить изображение по id
+     * @param id id изображения
+     */
     @Operation(summary = "Получить изображение по id", operationId = "getImageById")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "image/*")}),

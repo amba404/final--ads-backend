@@ -7,6 +7,9 @@ import lombok.Setter;
 import lombok.ToString;
 import ru.skypro.homework.config.CommentConfig;
 
+/**
+ * Сущность комментария к объявлению, для хранения в БД
+ */
 @Entity
 @Table(name = "comments")
 @Getter
@@ -25,9 +28,11 @@ public class CommentEntity {
     private String text;
 
     @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
     @ManyToOne
+    @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
 }

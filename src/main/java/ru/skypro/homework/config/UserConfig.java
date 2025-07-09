@@ -1,5 +1,8 @@
 package ru.skypro.homework.config;
 
+/**
+ * Конфигурация для настройки параметров полей Пользователя
+ */
 public class UserConfig {
 
     public final static int EMAIL_MIN_LENGTH = 4;

@@ -19,8 +19,7 @@ class CommentMapperTest {
 
     @BeforeEach
     void setUp() {
-        // Получаем реализацию через MapStruct (реализация генерируется автоматически)
-        commentMapper = new CommentMapperImpl(); // Убедитесь, что есть CommentMapperImpl.java
+        commentMapper = new CommentMapperImpl();
     }
 
     @Test

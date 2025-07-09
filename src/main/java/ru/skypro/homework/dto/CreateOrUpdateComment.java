@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.skypro.homework.config.CommentConfig;
 
+/**
+ * DTO для создания или обновления комментария
+ */
 @Data
 @Schema(description = "Данные для создания / обновления комментария")
 public class CreateOrUpdateComment {

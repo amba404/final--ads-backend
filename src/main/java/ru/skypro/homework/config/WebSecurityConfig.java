@@ -1,5 +1,6 @@
 package ru.skypro.homework.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,10 +11,15 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Конфигурация параметров безопасности
+ */
+
 @Configuration
 public class WebSecurityConfig {
 
-    private final static int ENCODE_STRENGTH = 5;
+    @Value(value = "${encode.strength:5}")
+    private int encodeStrength;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -26,19 +32,6 @@ public class WebSecurityConfig {
             "/image/**",
             "/ads"
     };
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-//        UserDetails user =
-//                User.builder()
-//                        .username("user@gmail.com")
-//                        .password("password")
-//                        .passwordEncoder(passwordEncoder::encode)
-//                        .roles(Role.USER.name())
-//                        .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -58,7 +51,7 @@ public class WebSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(ENCODE_STRENGTH);
+        return new BCryptPasswordEncoder(encodeStrength);
     }
 
 }

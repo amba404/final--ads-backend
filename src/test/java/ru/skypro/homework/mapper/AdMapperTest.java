@@ -17,12 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AdMapperTest {
 
-    //    @Autowired
     private AdMapper adMapper;
 
     @BeforeEach
     void setUp() {
-        adMapper = new AdMapperImpl(); // Замените на реальную реализацию MapStruct, если есть
+        adMapper = new AdMapperImpl();
     }
 
     @Test

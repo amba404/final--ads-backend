@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+/**
+ * DTO пользователя
+ */
 @Data
 @Schema(description = "Пользователь")
 public class User {

@@ -9,6 +9,9 @@ import ru.skypro.homework.model.AdEntity;
 
 import java.io.IOException;
 
+/**
+ * Описание интерфейса сервиса для работы с объявлениями
+ */
 public interface AdsService {
 
     Ads getAllAds();

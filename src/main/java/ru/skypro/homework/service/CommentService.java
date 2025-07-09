@@ -5,6 +5,10 @@ import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.CommentEntity;
 
+/**
+ * Описание интерфейса сервиса для работы с комментариями к объявлениям
+ */
+
 public interface CommentService {
 
     Comments getComments(int adId);

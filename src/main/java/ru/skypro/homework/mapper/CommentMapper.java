@@ -11,9 +11,17 @@ import ru.skypro.homework.model.UserEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Маппер для CommentEntity
+ */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CommentMapper {
 
+    /**
+     * Конвертирует CommentEntity в Comment
+     * @param comment сущность комментария {@link CommentEntity}
+     * @return DTO {@link Comment}
+     */
     default Comment toComment(CommentEntity comment) {
         Comment result = new Comment();
 
@@ -37,6 +45,11 @@ public interface CommentMapper {
         return result;
     }
 
+    /**
+     * Конвертирует список CommentEntity в Comments
+     * @param comments список сущностей {@link List} < {@link CommentEntity} >
+     * @return DTO {@link Comments}
+     */
     default Comments toComments(List<CommentEntity> comments) {
         Comments result = new Comments();
 
