@@ -1,5 +1,8 @@
 package ru.skypro.homework.config;
 
+/**
+ * Конфигурация для настройки параметров полей Объявления
+ */
 public class AdConfig {
 
     public final static int TITLE_MIN_LENGTH = 4;

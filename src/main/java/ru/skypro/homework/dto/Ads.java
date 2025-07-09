@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * DTO для списка объявлений
+ */
 @Data
 @Schema(description = "Список объявлений")
 @Getter

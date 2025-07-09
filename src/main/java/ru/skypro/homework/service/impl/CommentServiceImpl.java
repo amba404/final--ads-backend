@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.exception.NoRightsException;
 import ru.skypro.homework.exception.NotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdEntity;
@@ -16,6 +17,9 @@ import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
 
+/**
+ * Реализация сервиса для работы с комментариями
+ */
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -26,6 +30,12 @@ public class CommentServiceImpl implements CommentService {
     private final AdsRepository adsRepository;
     private final CommentMapper commentMapper;
 
+    /**
+     * Метод получения комментариев по id объявления
+     * @param adId  id объявления
+     * @return DTO {@link Comments}
+     * @throws NotFoundException если объявление не найдено
+     */
     @Override
     public Comments getComments(int adId) {
         if (!adsRepository.existsById(adId)) {
@@ -34,6 +44,14 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toComments(commentRepository.findAllByAdId(adId));
     }
 
+    /**
+     * Метод добавления комментария
+     * @param username логин пользователя
+     * @param adId id объявления
+     * @param comment DTO {@link CreateOrUpdateComment} структура с информацией о добавляемом комментарии
+     * @return DTO {@link Comment}
+     * @throws NotFoundException если объявление не найдено или пользователь не найден
+     */
     @Override
     public Comment addComment(String username, int adId, CreateOrUpdateComment comment) {
         UserEntity user = userService.getUserOrThrow(username);
@@ -49,6 +67,14 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toComment(commentRepository.save(commentEntity));
     }
 
+    /**
+     * Метод удаления комментария
+     * @param username логин пользователя
+     * @param adId id объявления
+     * @param commentId id комментария
+     * @throws NotFoundException если объявление не найдено или комментарий не найден
+     * @throws NoRightsException если пользователь не является владельцем комментария и не админ
+     */
     @Override
     public void deleteComment(String username, int adId, int commentId) {
         if (!commentRepository.existsByAdId(adId)) {
@@ -66,6 +92,16 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.delete(comment);
     }
 
+    /**
+     * Метод обновления комментария
+     * @param username логин пользователя
+     * @param adId id объявления
+     * @param commentId id комментария
+     * @param comment DTO {@link CreateOrUpdateComment} структура с информацией о комментарии
+     * @return DTO {@link Comment}
+     * @throws NotFoundException если объявление не найдено или комментарий не найден
+     * @throws NoRightsException если пользователь не является владельцем комментария и не админ
+     */
     @Override
     public Comment updateComment(String username, int adId, int commentId, CreateOrUpdateComment comment) {
         if (!commentRepository.existsByAdId(adId)) {
@@ -81,6 +117,12 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toComment(commentRepository.save(commentEntity));
     }
 
+    /**
+     * Метод получения комментария по id
+     * @param commentId id комментария
+     * @return DTO {@link Comment}
+     * @throws NotFoundException если комментарий не найден
+     */
     @Override
     public CommentEntity getCommentOrThrow(int commentId) {
         return commentRepository.findById(commentId)

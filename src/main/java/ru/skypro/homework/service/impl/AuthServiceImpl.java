@@ -8,6 +8,9 @@ import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
+/**
+ * Реализация сервиса авторизации и регистрации пользователя
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -16,6 +19,12 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
 
 
+    /**
+     * Проверка логина и пароля
+     * @param userName логин пользователя
+     * @param password пароль пользователя
+     * @return true - если логин и пароль верны, false - если не существует пользователя или не верен пароль
+     */
     @Override
     public boolean login(String userName, String password) {
         if (!userService.userExists(userName)) {
@@ -25,13 +34,14 @@ public class AuthServiceImpl implements AuthService {
         return encoder.matches(password, userDetails.getPassword());
     }
 
+    /**
+     * Регистрация нового пользователя
+     * @param register данные для регистрации {@link Register}
+     * @return true - если пользователь успешно зарегистрирован, false - если пользователь уже существует
+     */
     @Override
     public boolean register(Register register) {
-        if (userService.userExists(register.getUsername())) {
-            return false;
-        }
-        userService.createUser(register);
-        return true;
+        return userService.createUser(register);
     }
 
 }

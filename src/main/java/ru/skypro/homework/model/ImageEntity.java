@@ -9,8 +9,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Сущность изображения, для хранения в БД
+ */
 @Entity
 @Table(name = "images")
 @Setter
@@ -29,14 +33,17 @@ public class ImageEntity {
     @NotEmpty(message = "Тип файла не может быть пустым")
     private String mediaType;
 
+    /**
+     * Конструктор нового объекта, с генерацией UUID или установкой заданного
+     * @param uuid UUID для объекта или null для генерации нового UUID
+     */
     public ImageEntity(UUID uuid) {
-        if (uuid == null) {
-            this.id = UUID.randomUUID();
-        } else {
-            this.id = uuid;
-        }
+        this.id = Objects.requireNonNullElseGet(uuid, UUID::randomUUID);
     }
 
+    /**
+     * Генерирует ссылку на изображение
+     */
     public String getUrl() {
         if (id == null) {
             return null;

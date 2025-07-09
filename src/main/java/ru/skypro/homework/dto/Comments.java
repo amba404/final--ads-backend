@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * DTO для списка комментариев
+ */
 @Data
 @Schema(description = "Список комментариев")
 @Getter

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import ru.skypro.homework.config.UserConfig;
 
+/**
+ * DTO для регистрации нового пользователя
+ */
 @Data
 @Schema(description = "Данные для регистрации пользователя")
 public class Register {

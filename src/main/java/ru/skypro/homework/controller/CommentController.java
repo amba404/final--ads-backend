@@ -17,6 +17,11 @@ import ru.skypro.homework.service.CommentService;
 
 import java.security.Principal;
 
+/**
+ * Контроллер для работы с комментариями
+ * <p>
+ * Обрабатывает HTTP запросы по работе с комментариями
+ */
 @Tag(name = "Комментарии", description = "Методы для работы с комментариями")
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
@@ -27,6 +32,11 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    /**
+     * Получение комментариев объявления
+     * @param id id объявления
+     * @return объект {@link Comments} с массивом комментариев
+     */
     @Operation(summary = "Получение комментариев объявления", operationId = "getComments")
     @GetMapping("/{id}/comments")
     @ApiResponses(value = {
@@ -39,6 +49,13 @@ public class CommentController {
         return commentService.getComments(id);
     }
 
+    /**
+     * Добавление комментария к объявлению (авторизованным пользователям)
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param id id объявления
+     * @param comment объект свойств добавляемого комментария {@link CreateOrUpdateComment}
+     * @return объект {@link Comment} добавленного комментария
+     */
     @Operation(summary = "Добавление комментария к объявлению", operationId = "addComment")
     @PostMapping("/{id}/comments")
     @ApiResponses(value = {
@@ -51,6 +68,12 @@ public class CommentController {
         return commentService.addComment(principal.getName(), id, comment);
     }
 
+    /**
+     * Удаление комментария (авторизованным пользователям)
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param id id объявления
+     * @param commentId id комментария
+     */
     @Operation(summary = "Удаление комментария", operationId = "deleteComment")
     @DeleteMapping("/{id}/comments/{commentId}")
     @ApiResponses(value = {
@@ -63,6 +86,14 @@ public class CommentController {
         commentService.deleteComment(principal.getName(), id, commentId);
     }
 
+    /**
+     * Обновление комментария (авторизованным пользователям)
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param id id объявления
+     * @param commentId id комментария
+     * @param comment объект свойств обновляемого комментария {@link CreateOrUpdateComment}
+     * @return объект {@link Comment} обновленного комментария
+     */
     @Operation(summary = "Обновление комментария", operationId = "updateComment")
     @PatchMapping("/{id}/comments/{commentId}")
     @ApiResponses(value = {

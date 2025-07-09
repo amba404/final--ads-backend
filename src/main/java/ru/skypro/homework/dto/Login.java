@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.skypro.homework.config.UserConfig;
 
+/**
+ * DTO для логина
+ */
 @Data
 @Schema(description = "Данные для входа")
 public class Login {

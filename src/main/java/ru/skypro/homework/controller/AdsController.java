@@ -25,6 +25,11 @@ import ru.skypro.homework.service.AdsService;
 import java.io.IOException;
 import java.security.Principal;
 
+/**
+ * Контроллер для работы с объявлениями
+ * <p>
+ * Обрабатывает HTTP-запросы, связанные с объявлениями.
+ */
 @Tag(name = "Объявления", description = "Методы для работы с объявлениями")
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
@@ -35,6 +40,12 @@ public class AdsController {
 
     private final AdsService adsService;
 
+    /**
+     * Получение всех объявлений
+     * <p>
+     * Возвращает все объявления, всех пользователей, без авторизации
+     * @return объект {@link Ads} с массивом объявлений
+     */
     @Operation(summary = "Получение всех объявлений", operationId = "getAllAds")
     @GetMapping()
     @ApiResponses(value = {
@@ -45,6 +56,13 @@ public class AdsController {
         return adsService.getAllAds();
     }
 
+    /**
+     * Добавление объявления авторизованным пользователем
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param properties свойства добавляемого объявления {@link CreateOrUpdateAd}
+     * @param image файл изображения для объявления {@link MultipartFile}
+     * @return объект {@link Ad} с добавленным объявлением
+     */
     @Operation(summary = "Добавление объявления", operationId = "addAd")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Secured({"USER", "ADMIN"})
@@ -61,6 +79,11 @@ public class AdsController {
         return adsService.addAd(principal.getName(), properties, image);
     }
 
+    /**
+     * Получение информации об объявлении по id
+     * @param id id объявления
+     * @return объект {@link ExtendedAd} с информацией об объявлении
+     */
     @Operation(summary = "Получение информации об объявлении", operationId = "getAds")
     @GetMapping("/{id}")
     @ApiResponses(value = {
@@ -73,6 +96,11 @@ public class AdsController {
         return adsService.getAds(id);
     }
 
+    /**
+     * Удаление объявления авторизованным пользователем
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param id id объявления
+     */
     @Operation(summary = "Удаление объявления", operationId = "removeAd")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -86,6 +114,13 @@ public class AdsController {
         adsService.removeAd(principal.getName(), id);
     }
 
+    /**
+     * Обновление информации об объявлении авторизованным пользователем
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param id id объявления
+     * @param updateAd обновленные свойства объявления {@link CreateOrUpdateAd}
+     * @return объект {@link Ad} со свойствами объявления
+     */
     @Operation(summary = "Обновление информации об объявлении", operationId = "updateAds")
     @PatchMapping("/{id}")
     @ApiResponses(value = {
@@ -99,6 +134,11 @@ public class AdsController {
         return adsService.updateAds(principal.getName(), id, updateAd);
     }
 
+    /**
+     * Получение объявлений авторизованного пользователя
+     * @param principal авторизованный пользователь {@link Principal}
+     * @return объект {@link Ads} с массивом объявлений
+     */
     @Operation(summary = "Получение объявлений авторизованного пользователя", operationId = "getAdsMe")
     @GetMapping("/me")
     @ApiResponses(value = {
@@ -110,6 +150,13 @@ public class AdsController {
         return adsService.getAdsMe(principal.getName());
     }
 
+    /**
+     * Обновление картинки объявления
+     * @param principal авторизованный пользователь {@link Principal}
+     * @param id id объявления
+     * @param image файл изображения для объявления {@link MultipartFile}
+     * @return массив байт картинки в теле ответа
+     */
     @Operation(summary = "Обновление картинки объявления", operationId = "updateImage")
     @PatchMapping("/{id}/image")
     @ApiResponses(value = {

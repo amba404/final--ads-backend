@@ -6,6 +6,9 @@ import ru.skypro.homework.model.ImageEntity;
 
 import java.util.UUID;
 
+/**
+ * Репозиторий управления сущностями БД для изображений
+ */
 @Repository
 public interface ImageRepository extends JpaRepository<ImageEntity, UUID> {
 }

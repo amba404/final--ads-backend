@@ -7,6 +7,10 @@ import ru.skypro.homework.model.Imaged;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * Описание интерфейса сервиса для работы с изображениями
+ */
+
 public interface ImageService {
     byte[] saveImage(Imaged object, MultipartFile file) throws IOException;
 

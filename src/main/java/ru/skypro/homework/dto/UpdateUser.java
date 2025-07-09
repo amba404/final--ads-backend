@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.skypro.homework.config.UserConfig;
 
+/**
+ * DTO для обновления данных пользователя
+ */
 @Data
 @Schema(description = "Данные для обновления данных пользователя")
 public class UpdateUser {

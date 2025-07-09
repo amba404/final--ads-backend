@@ -17,6 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
+/**
+ * Реализация сервиса для работы с изображениями
+ */
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
@@ -25,6 +28,15 @@ public class ImageServiceImpl implements ImageService {
     @Value(value = "${path.to.images:images}")
     private String imageDirectory;
 
+    /**
+     * Сохранение изображения.
+     * <p>
+     * Сохраняет изображение в директорию. Создает запись в БД. Устанавливает связь изображения с объектом.
+     * Если объект уже имеет изображение, то оно будет перезаписано.
+     * @param object объект, для которого сохраняется изображение
+     * @param mFile файл с изображением {@link MultipartFile}
+     * @return массив байтов изображения
+     */
     @Override
     public byte[] saveImage(Imaged object, @NotNull MultipartFile mFile) throws IOException {
 
@@ -70,11 +82,23 @@ public class ImageServiceImpl implements ImageService {
         return mFile.getBytes();
     }
 
+    /**
+     * Получение изображения по UUID
+     * @param uuid UUID изображения
+     * @return массив байтов изображения
+     * @throws NotFoundException если изображение не найдено
+     */
     @Override
     public ImageEntity findById(UUID uuid) {
         return findImageOrFail(uuid);
     }
 
+    /**
+     * Удаление изображения.
+     * <p>
+     * Очищает поле изображения у объекта. Удаляет файл из директории. Удаляет запись в БД
+     * @param object объект, у которого удаляется изображение
+     */
     @Override
     public void deleteImage(Imaged object) throws IOException {
         if (object.getImage() == null) {

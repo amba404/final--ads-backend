@@ -15,6 +15,10 @@ import ru.skypro.homework.dto.Role;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Сущность пользователя, для хранения в БД.
+ * Используется для авторизации и указания авторства объявлений и комментариев
+ */
 @Entity
 @Data
 @Table(name = "users")
@@ -66,6 +70,10 @@ public class UserEntity implements UserDetails, Imaged {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
 
+    /**
+     * Метод для получения ролей пользователя, согласно контракту {@link UserDetails}
+     * @return Collection GrantedAuthority
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

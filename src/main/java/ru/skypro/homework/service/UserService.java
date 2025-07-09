@@ -11,6 +11,9 @@ import ru.skypro.homework.model.UserEntity;
 
 import java.io.IOException;
 
+/**
+ * Описание интерфейса сервиса для работы с пользователями
+ */
 public interface UserService extends UserDetailsService {
     void setPassword(String userName, NewPassword password);
 
@@ -22,7 +25,7 @@ public interface UserService extends UserDetailsService {
 
     boolean userExists(String userName);
 
-    void createUser(Register user);
+    boolean createUser(Register user);
 
     UserEntity getUserOrThrow(String username) throws UsernameNotFoundException;
 

@@ -7,6 +7,9 @@ import lombok.Setter;
 import lombok.ToString;
 import ru.skypro.homework.config.CommentConfig;
 
+/**
+ * Сущность комментария к объявлению, для хранения в БД
+ */
 @Entity
 @Table(name = "comments")
 @Getter

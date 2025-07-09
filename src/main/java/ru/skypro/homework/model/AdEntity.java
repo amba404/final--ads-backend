@@ -11,6 +11,9 @@ import ru.skypro.homework.config.AdConfig;
 
 import java.util.List;
 
+/**
+ * Сущность объявления для хранения в БД
+ */
 @Entity
 @Table(name = "ads")
 @Getter

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.skypro.homework.config.UserConfig;
 
+/**
+ * DTO для изменения пароля
+ */
 @Schema(description = "Изменение пароля")
 @Data
 public class NewPassword {
