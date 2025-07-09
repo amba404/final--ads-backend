@@ -10,6 +10,7 @@ import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.CommentEntity;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
@@ -22,11 +23,12 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final AdsService adsService;
+    private final AdsRepository adsRepository;
     private final CommentMapper commentMapper;
 
     @Override
     public Comments getComments(int adId) {
-        if (!commentRepository.existsByAdId(adId)) {
+        if (!adsRepository.existsById(adId)) {
             throw new NotFoundException("Ad not found");
         }
         return commentMapper.toComments(commentRepository.findAllByAdId(adId));
