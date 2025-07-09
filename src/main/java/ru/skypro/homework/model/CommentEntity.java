@@ -25,9 +25,11 @@ public class CommentEntity {
     private String text;
 
     @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
     @ManyToOne
+    @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
 }

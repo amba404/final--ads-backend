@@ -12,4 +12,5 @@ public interface ImageService {
 
     ImageEntity findById(UUID uuid);
 
+    void deleteImage(Imaged object) throws IOException;
 }

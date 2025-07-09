@@ -36,11 +36,13 @@ public class ImageServiceImpl implements ImageService {
             uuid = object.getImage().getId();
         }
 
-        String imageName = uuid.toString();
-        Path filePath = Path.of(imageDirectory, imageName + "." + getExtension(mFile.getOriginalFilename()));
+        String imageName = uuid.toString()+ "." + getExtension(mFile.getOriginalFilename());
+
+        Path filePath = Path.of(imageDirectory, imageName );
 
         Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
+
+        deleteFile(imageName);
 
         try (InputStream is = mFile.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, StandardOpenOption.CREATE_NEW);
@@ -51,6 +53,11 @@ public class ImageServiceImpl implements ImageService {
         }
 
         ImageEntity image = findImageOrNew(uuid);
+
+        if (image.getFilePath() != null) {
+            deleteFile(image.getFilePath());
+        }
+
         image.setMediaType(mFile.getContentType());
         image.setFileSize(mFile.getSize());
         image.setFilePath(filePath.toString());
@@ -66,6 +73,35 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageEntity findById(UUID uuid) {
         return findImageOrFail(uuid);
+    }
+
+    @Override
+    public void deleteImage(Imaged object) throws IOException {
+        if (object.getImage() == null) {
+            return;
+        }
+
+        ImageEntity image = object.getImage();
+
+        if (image == null) {
+            return;
+        }
+
+        try {
+            deleteFile(image.getFilePath());
+        } catch (IOException e) {
+            throw new IOException(e);
+        }
+
+        object.setImage(null);
+
+        imageRepository.delete(image);
+    }
+
+    private void deleteFile(@NotNull String imageName) throws IOException {
+        Path filePath = Path.of(imageDirectory, imageName);
+
+        Files.deleteIfExists(filePath);
     }
 
     private String getExtension(String fileName) {

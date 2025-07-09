@@ -1,6 +1,9 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
@@ -21,7 +24,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AdsServiceImpl implements AdsService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ImageService imageService;
     private final UserService userService;
@@ -69,6 +75,13 @@ public class AdsServiceImpl implements AdsService {
         AdEntity adEntity = getAdOrThrow(id);
 
         userService.checkOwnerOrThrow(username, adEntity.getAuthor());
+
+        try {
+            imageService.deleteImage(adEntity);
+        } catch (IOException e) {
+            logger.error("Error while deleting image", e);
+            return;
+        }
 
         adsRepository.delete(adEntity);
     }

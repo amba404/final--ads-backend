@@ -41,7 +41,7 @@ public class AdEntity implements Imaged {
     @ManyToOne
     private ImageEntity image;
 
-    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ad", cascade = {CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
 
 }
